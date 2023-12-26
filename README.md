@@ -1,5 +1,7 @@
 # LCR API
 
+Forked from: https://github.com/philipbl/LCR-API. Updated in PIP as lcr-api-plus to pull the new version that works.
+
 A Python API for Leader and Clerk Resources for [The Church of Jesus Christ of Latter-day Saints](https://www.churchofjesuschrist.org/?lang=eng). I've only tested it with Python 3.5+.
 
 The following calls are supported, which correspond to a page in LCR:
