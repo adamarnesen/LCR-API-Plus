@@ -77,7 +77,9 @@ class API:
         password_input.submit()
 
         WebDriverWait(self.driver, TIMEOUT).until(
-            ec.presence_of_element_located((By.CSS_SELECTOR, "input[type='search']"))
+            ec.presence_of_element_located(
+                (By.CSS_SELECTOR, "platform-header.PFshowHeader")
+            )
         )
 
         # Get authState parameter.
