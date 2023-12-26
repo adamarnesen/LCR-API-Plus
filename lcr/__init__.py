@@ -12,12 +12,16 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+from lcr.quarter import Quarter
+from lcr.unit import Unit
+
 _LOGGER = logging.getLogger(__name__)
 HOST = "churchofjesuschrist.org"
 BETA_HOST = f"beta.{HOST}"
 LCR_DOMAIN = f"lcr.{HOST}"
 CHROME_OPTIONS = webdriver.chrome.options.Options()
 CHROME_OPTIONS.add_argument("--headless")
+
 TIMEOUT = 10
 
 
@@ -215,3 +219,41 @@ class API:
         }
         result = self._make_request(request)
         return result.json()
+
+    def quarterly_report(self, unit_number, quarter, year):
+        """
+        Get the quarterly report for the given unit and quarter.
+        """
+        _LOGGER.info(f"Getting quarterly report for {unit_number} and {quarter}")
+
+        request = {
+            "url": f"https://lcr.churchofjesuschrist.org/api/report/quarterly-report",
+            "params": {
+                "lang": "eng",
+                "unitNumber": unit_number,
+                "populateLabels": True,
+                "quarter": quarter,
+                "year": year,
+            },
+        }
+        result = self._make_request(request)
+        return result.json()
+
+    def available_report_quarters(self, unit: Unit):
+        """
+        Get the quarters for which the quarterly report is available.
+        """
+        _LOGGER.info(f"Getting available quarters for {unit}")
+
+        request = {
+            "url": f"https://lcr.churchofjesuschrist.org/api/report/quarterly-report/quarters",
+            "params": {
+                "lang": "eng",
+                "unitNumber": unit.number,
+            },
+        }
+        result = self._make_request(request)
+        quarters = []
+        for encoded_quarter in result.json():
+            quarters.append(Quarter(encoded_quarter))
+        return quarters
