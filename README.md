@@ -23,14 +23,6 @@ More calls will be supported as I have time. Pull requests are welcomed!
 
 This code is rough around the edges. I don't handle any cases where a person using this code doesn't have permissions to access the reports, so I don't know what will happen.
 
-## Install
-
-To install, run
-
-```
-pip3 install lcr-api
-```
-
 ## Usage
 
 ```python
