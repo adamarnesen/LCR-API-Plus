@@ -1,6 +1,6 @@
 # LCR API
 
-A Python API for Leader and Clerk Resources for the LDS Church. I've only tested it with Python 3.5+.
+A Python API for Leader and Clerk Resources for [The Church of Jesus Christ of Latter-day Saints](https://www.churchofjesuschrist.org/?lang=eng). I've only tested it with Python 3.5+.
 
 The following calls are supported, which correspond to a page in LCR:
 
@@ -43,8 +43,7 @@ for member in move_ins:
     print("{}: {}".format(member['spokenName'], member['textAddress']))
 ```
 
-
 ### To Do
+
 - Add more tests
 - Support more reports and calls
-
