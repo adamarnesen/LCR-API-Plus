@@ -172,6 +172,125 @@ def chart_youth_active_per_ward(df: pd.DataFrame):
     )
 
 
+def aggregate_attendance_and_percentages(df: pd.DataFrame):
+    """Aggregate attendance.
+
+    Computes the aggregated attendance that includes both men and women attendance as well as the
+    percentage of attendance in these aggregates compared to the potential.
+    """
+
+    df["sacrament.attending.percent"] = (
+        df["sacrament.attendance"] / df["sacrament.attendance.potential"]
+    )
+
+    df["adults.attending"] = (
+        df["melch.attending"]
+        + df["prospective.elders.attending"]
+        + df["women.attending.meetings"]
+    )
+    df["adults.attending.potential"] = (
+        df["melch.attending.potential"]
+        + df["prospective.elders.attending.potential"]
+        + df["women.attending.meetings.potential"]
+    )
+    df["adults.attending.percent"] = (
+        df["adults.attending"] / df["adults.attending.potential"]
+    )
+
+    df["youth.attending"] = df["young.men.attending"] + df["young.women.attending"]
+    df["youth.attending.potential"] = (
+        df["young.men.attending.potential"] + df["young.women.attending.potential"]
+    )
+    df["youth.attending.percent"] = (
+        df["youth.attending"] / df["youth.attending.potential"]
+    )
+
+    df["children.attending.percent"] = (
+        df["children.attending.primary.2019.1"]
+        / df["children.attending.primary.2019.1.potential"]
+    )
+
+    df["adults.youth.submitted.names.percent"] = (
+        df["adults.youth.submitted.names"]
+        / df["adults.youth.submitted.names.potential"]
+    )
+    return df
+
+
+def chart_attendance_percent_trend(df: pd.DataFrame):
+    plots = [
+        {
+            "name": "Sacrament",
+            "variable": "sacrament.attending.percent",
+        },
+        {
+            "name": "Adults",
+            "variable": "adults.attending.percent",
+        },
+        {
+            "name": "Youth",
+            "variable": "youth.attending.percent",
+        },
+        {
+            "name": "Children",
+            "variable": "children.attending.percent",
+        },
+    ]
+    names = [d["name"] for d in plots]
+    grid_size = math.ceil(math.sqrt(len(names)))
+    fig = make_subplots(rows=grid_size, cols=grid_size, subplot_titles=names)
+    for i, plot in enumerate(plots):
+        grid_row = i // grid_size + 1
+        grid_col = i % grid_size + 1
+        fig_px = px.line(
+            df,
+            x=df["quarter"],
+            y=df[plot["variable"]],
+            color="unitName",
+            markers=True,
+            color_discrete_sequence=px.colors.qualitative.D3,
+        )
+        fig_go = go.Figure(fig_px)
+        for trace in fig_go.data:
+            if i > 0:
+                trace.showlegend = False
+            fig.add_trace(trace, row=grid_row, col=grid_col)
+    fig.update_yaxes(tickformat=".2%")
+    fig.update_layout(
+        title={
+            "text": "Attendance Across Groups",
+        },
+    )
+    fig.show()
+
+
+def chart_correlations(df: pd.DataFrame):
+    corr_matrix.dropna(axis=1, how="all", inplace=True)
+    corr_matrix.dropna(axis=0, how="all", inplace=True)
+    cols = [i for i in corr_matrix.columns if (not "attend" in i)]
+    rows = [
+        i
+        for i in corr_matrix.index
+        if (not "potential" in i) and ("attend" in i) and ("percent" in i)
+    ]
+    corr_matrix = corr_matrix[cols]
+    corr_matrix = corr_matrix.loc[rows]
+    corr_matrix.sort_index(inplace=True)
+    corr_matrix.sort_index(axis=1, inplace=True)
+    fig = px.imshow(
+        corr_matrix,
+        x=corr_matrix.columns,
+        y=corr_matrix.index,
+        color_continuous_scale="RdBu_r",
+    )
+    fig.update_layout(
+        title={
+            "text": "Attendance Percentages Correlation to other metrics",
+        },
+    )
+    fig.show()
+
+
 def make_individual_charts(df: pd.DataFrame):
     chart_melch_per_ward(df)
     chart_primary_per_ward(df)
@@ -182,8 +301,11 @@ def make_individual_charts(df: pd.DataFrame):
 
 def create_quarterly_analytics(data_file: str, starting_year: int, unit_name: str):
     df = pd.read_csv(data_file)
+    chart_correlations(df)
     df = df[df["year"] >= starting_year]
+    df = aggregate_attendance_and_percentages(df)
     make_individual_charts(df)
+    chart_attendance_percent_trend(df)
     rows = [
         {
             "name": "Membership",
