@@ -96,5 +96,4 @@ ENV/
 
 .vscode/launch.json
 /analytics/data
-units.json
 profile.json
