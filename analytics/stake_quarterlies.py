@@ -180,7 +180,7 @@ def make_individual_charts(df: pd.DataFrame):
     chart_youth_active_per_ward(df)
 
 
-def create_quarterly_analytics(data_file: str, starting_year: int):
+def create_quarterly_analytics(data_file: str, starting_year: int, unit_name: str):
     df = pd.read_csv(data_file)
     df = df[df["year"] >= starting_year]
     make_individual_charts(df)
@@ -214,4 +214,4 @@ def create_quarterly_analytics(data_file: str, starting_year: int):
             "variables": ["children.attending.primary.2019.1"],
         },
     ]
-    make_charts_colum_per_ward(df, rows, "RRTES Wards")
+    make_charts_colum_per_ward(df, rows, unit_name)
