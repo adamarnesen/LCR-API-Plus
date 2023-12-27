@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from lcr.api import API
 
 
@@ -133,16 +135,6 @@ class Test:
         actual_keys = set(moveout.keys())
         self.check_keys(expected_keys, actual_keys)
 
-    def test_ministering(self):
-        ministering = Test.lcr_api.ministering()
-        assert isinstance(ministering, dict)
-
-        eq = ministering["elders"]
-        assert isinstance(eq, list)
-
-        rs = ministering["reliefSociety"]
-        assert isinstance(rs, list)
-
     def test_member_list(self):
         member_list = Test.lcr_api.member_list()
 
@@ -258,3 +250,51 @@ class Test:
 
         actual_keys = set(member.keys())
         self.check_keys(expected_keys, actual_keys)
+
+    def test_ministeringApi_RespondWithoutErrors(self):
+        ministering = self.lcr_api.ministering()
+        assert isinstance(ministering, dict)
+
+    def test_ministeringApi_EldersQuorum_AccountHasAccess(self):
+        ministering = self.lcr_api.ministering("EQ")
+        access_key = "interviewViewAccess"
+        access_expected_value = True
+        assert (
+            access_key in ministering
+        ), f"{access_key} should be in the ministering response."
+        assert (
+            ministering[access_key] == access_expected_value
+        ), f"{access_key} should be {access_expected_value} if your user has access to this resource."
+
+    def test_ministeringApi_EldersQuorum_MatchesStructure(self):
+        ministering = self.lcr_api.ministering("EQ")
+        elders_key = "elders"
+        assert (
+            elders_key in ministering
+        ), f"key: {elders_key} should be in the ministering response."
+        eq = ministering["elders"]
+        assert isinstance(eq, list)
+
+    def test_ministeringApi_ReliefSociety_AccountHasAccess(self):
+        ministering = self.lcr_api.ministering("RS")
+        access_key = "interviewViewAccess"
+        access_expected_value = True
+        assert (
+            access_key in ministering
+        ), f"{access_key} should be in the ministering response."
+        assert (
+            ministering[access_key] == access_expected_value
+        ), f"{access_key} should be {access_expected_value} if your user has access to this resource."
+
+    def test_ministeringApi_ReliefSociety_MatchesStructure(self):
+        ministering = self.lcr_api.ministering("RS")
+        relief_society_key = "reliefSociety"
+        assert (
+            relief_society_key in ministering
+        ), f"key: {relief_society_key} should be in the ministering response."
+        eq = ministering["reliefSociety"]
+        assert isinstance(eq, list)
+
+    def test_InvalidOrganization_ThrowsValueError(self):
+        with pytest.raises(ValueError) as e_info:
+            ministering = self.lcr_api.ministering("BADID")
