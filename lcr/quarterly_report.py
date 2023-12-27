@@ -1,7 +1,7 @@
 from typing import List
 
 import pandas as pd
-from lcr import API
+from lcr.api import API
 from lcr.quarter import Quarter
 from lcr.unit import Unit
 
