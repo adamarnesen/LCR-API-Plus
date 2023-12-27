@@ -1,3 +1,7 @@
+import json
+from typing import Dict, List
+
+
 class Unit:
     def __init__(self, unit_name, unit_number):
         self._name = unit_name
@@ -23,5 +27,21 @@ class Unit:
             raise ValueError("Unit number must be an integer")
         self._number = value
 
+    def to_dict(self):
+        return {"name": self._name, "number": self._number}
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data["name"], data["number"])
+
     def __str__(self):
         return f"Unit(Name: {self._name}, Number: {self._number})"
+
+
+def load_units(units_json_file: str):
+    with open(units_json_file) as f:
+        json_units = json.load(f)
+    units = []
+    for json_unit in json_units:
+        units.append(Unit(json_unit["name"], json_unit["number"]))
+    return units
