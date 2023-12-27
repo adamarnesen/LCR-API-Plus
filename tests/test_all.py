@@ -1,5 +1,6 @@
 import json
-import lcr
+
+from lcr.api import API
 
 
 class Test:
@@ -11,7 +12,7 @@ class Test:
         user = profile["username"]
         password = profile["password"]
         unit_number = profile["unit_number"]
-        cls.cd = lcr.API(user, password, unit_number)
+        cls.lcr_api = API(user, password, unit_number)
 
     def check_keys(self, expected, actual):
         if expected != actual:
@@ -25,7 +26,7 @@ class Test:
             assert False, message
 
     def test_birthday(self):
-        birthdays = Test.cd.birthday_list(4, 1)
+        birthdays = Test.lcr_api.birthday_list(4, 1)
 
         birthdays = birthdays[0]["birthdays"]
         assert isinstance(birthdays, list)
@@ -75,7 +76,7 @@ class Test:
         self.check_keys(expected_keys, actual_keys)
 
     def test_moveins(self):
-        moveins = Test.cd.members_moved_in(5)
+        moveins = Test.lcr_api.members_moved_in(5)
         assert isinstance(moveins, list)
 
         movein = moveins[0]
@@ -111,7 +112,7 @@ class Test:
         self.check_keys(expected_keys, actual_keys)
 
     def test_moveouts(self):
-        moveouts = Test.cd.members_moved_out(5)
+        moveouts = Test.lcr_api.members_moved_out(5)
         assert isinstance(moveouts, list)
 
         moveout = moveouts[0]
@@ -133,7 +134,7 @@ class Test:
         self.check_keys(expected_keys, actual_keys)
 
     def test_ministering(self):
-        ministering = Test.cd.ministering()
+        ministering = Test.lcr_api.ministering()
         assert isinstance(ministering, dict)
 
         eq = ministering["elders"]
@@ -143,7 +144,7 @@ class Test:
         assert isinstance(rs, list)
 
     def test_member_list(self):
-        member_list = Test.cd.member_list()
+        member_list = Test.lcr_api.member_list()
 
         assert isinstance(member_list, list)
 
@@ -204,7 +205,7 @@ class Test:
         self.check_keys(expected_keys, actual_keys)
 
     def test_recommend_status(self):
-        recommend_status = Test.cd.recommend_status()
+        recommend_status = Test.lcr_api.recommend_status()
 
         assert isinstance(recommend_status, list)
 

@@ -1,7 +1,8 @@
 import json
 from analytics.data import *
 from analytics.stake_quarterlies import create_quarterly_analytics
-from lcr import API, unit, quarterly_report
+from lcr import unit, quarterly_report
+from lcr.api import API
 
 
 def load_profile():
