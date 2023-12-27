@@ -94,6 +94,9 @@ ENV/
 # Rope project settings
 .ropeproject
 
-.vscode/launch.json
+# vs code
+.vscode/
+
+# project secrets
 /analytics/data
 profile.json
