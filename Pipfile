@@ -11,6 +11,7 @@ chromedriver = "*"
 pandas = "*"
 plotly = "*"
 webdriver-manager = "*"
+statsmodels = "*"
 
 [dev-packages]
 
