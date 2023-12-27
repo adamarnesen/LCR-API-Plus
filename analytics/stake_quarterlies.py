@@ -18,6 +18,11 @@ STANDARDS_2024 = {
     "ward.active.adults": 100,
     "ward.active.youth": 20,
 }
+"""Unit Standards starting in 2024.
+
+In late 2023, the church released standards for unit sizes that would take effect in 2024. 
+The summary of these changes can be seen in on the [church newsroom](https://newsroom.churchofjesuschrist.org/article/first-presidency-announces-uniform-worldwide-standards-for-ward-and-stake-boundaries).
+This variable reflects what those new minimums are and is used when drawing min lines for reports."""
 
 
 def get_section_by_label(qrp, section_id):
