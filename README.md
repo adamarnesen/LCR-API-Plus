@@ -1,4 +1,4 @@
-# LCR API
+# LCR API Plus
 
 Forked from: https://github.com/philipbl/LCR-API.
 
@@ -14,12 +14,13 @@ The following calls are supported, which correspond to a page in LCR:
 - Member list
 - Calling list
 - Recommend Status
+- Quarterly Report
+  - Quarters for which the report is available
+- Access Table
+- Individual Photos
+  - Gets the photo for an individual. This is the same call that LCR uses to show a picture when you go to a member's page.
 
-There is one additional call supported:
-
-- Individual photo – Gets the photo for an individual. This is the same call that LCR uses to show a picture when you go to a member's page.
-
-More calls will be supported as I have time. Pull requests are welcomed!
+Pull requests are welcomed!
 
 ## Disclaimer
 
