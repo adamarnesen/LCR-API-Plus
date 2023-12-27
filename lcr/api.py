@@ -174,15 +174,26 @@ class API:
         result = self._make_request(request)
         return result.json()
 
-    def ministering(self):
+    def ministering(self, organization: str = None):
         """
         API parameters known to be accepted are lang type unitNumber and quarter.
+
+        Args:
+            organization (str): The organization type to get ministering information for. This must
+                be either `'EQ'` or `'RS'`
+
+        Returns:
+            json: the `json` value from the api response.
         """
         _LOGGER.info("Getting ministering data")
         request = {
             "url": f"https://{LCR_DOMAIN}/api/umlu/v1/ministering/data-full",
             "params": {"lang": "eng", "unitNumber": self.unit_number},
         }
+        if organization:
+            if not organization in {"EQ", "RS"}:
+                raise ValueError("organization must be one of 'EQ' or 'RS'")
+            request["params"]["type"] = organization
 
         result = self._make_request(request)
         return result.json()
