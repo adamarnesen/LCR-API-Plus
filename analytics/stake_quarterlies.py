@@ -25,6 +25,14 @@ The summary of these changes can be seen in on the [church newsroom](https://new
 This variable reflects what those new minimums are and is used when drawing min lines for reports."""
 
 
+def __show_and_save_html_report(report_title: str, fig):
+    """Saves the html report"""
+    html_report_name = f"{report_title}.html"
+    fig.write_html(create_and_get_output_path(html_report_name))
+    print(f"{report_title} - Saved.")
+    fig.show()
+
+
 def get_section_by_label(qrp, section_id):
     section = next(
         (item for item in qrp["sections"] if item.get("nameResourceId") == section_id),
@@ -84,7 +92,7 @@ def make_bar_chart_per_ward_in_grid(
         },
         barmode="stack",
     )
-    fig.show()
+    __show_and_save_html_report(title, fig)
 
 
 def make_charts_colum_per_ward(df: pd.DataFrame, rows, title):
@@ -124,7 +132,7 @@ def make_charts_colum_per_ward(df: pd.DataFrame, rows, title):
             "text": title,
         },
     )
-    fig.show()
+    __show_and_save_html_report(title, fig)
 
 
 def chart_melch_per_ward(df: pd.DataFrame):
@@ -256,15 +264,17 @@ def chart_attendance_percent_trend(df: pd.DataFrame):
                 trace.showlegend = False
             fig.add_trace(trace, row=grid_row, col=grid_col)
     fig.update_yaxes(tickformat=".2%")
+    title = "Attendance Across Groups"
     fig.update_layout(
         title={
-            "text": "Attendance Across Groups",
+            "text": title,
         },
     )
-    fig.show()
+    __show_and_save_html_report(title, fig)
 
 
 def chart_correlations(df: pd.DataFrame):
+    corr_matrix = df.corr(numeric_only=True)
     corr_matrix.dropna(axis=1, how="all", inplace=True)
     corr_matrix.dropna(axis=0, how="all", inplace=True)
     cols = [i for i in corr_matrix.columns if (not "attend" in i)]
@@ -283,12 +293,9 @@ def chart_correlations(df: pd.DataFrame):
         y=corr_matrix.index,
         color_continuous_scale="RdBu_r",
     )
-    fig.update_layout(
-        title={
-            "text": "Attendance Percentages Correlation to other metrics",
-        },
-    )
-    fig.show()
+    title = "Attendance Percentages Correlation to other metrics"
+    fig.update_layout(title={"text": title})
+    __show_and_save_html_report(title, fig)
 
 
 def make_individual_charts(df: pd.DataFrame):
@@ -301,9 +308,9 @@ def make_individual_charts(df: pd.DataFrame):
 
 def create_quarterly_analytics(data_file: str, starting_year: int, unit_name: str):
     df = pd.read_csv(data_file)
+    df = aggregate_attendance_and_percentages(df)
     chart_correlations(df)
     df = df[df["year"] >= starting_year]
-    df = aggregate_attendance_and_percentages(df)
     make_individual_charts(df)
     chart_attendance_percent_trend(df)
     rows = [
