@@ -105,7 +105,7 @@ class API:
     def birthday_list(self, month, months=1):
         _LOGGER.info("Getting birthday list")
         request = {
-            "url": "https://{}/services/report/birthday-list".format(LCR_DOMAIN),
+            "url": f"https://{LCR_DOMAIN}/api/report/birthday-list",
             "params": {"lang": "eng", "month": month, "months": months},
         }
 
@@ -115,9 +115,7 @@ class API:
     def members_moved_in(self, months):
         _LOGGER.info("Getting members moved in")
         request = {
-            "url": "https://{}/api/report/members-moved-in/unit/{}/{}".format(
-                LCR_DOMAIN, self.unit_number, months
-            ),
+            "url": f"https://{LCR_DOMAIN}/api/report/members-moved-in/unit/{self.unit_number}/{months}",
             "params": {"lang": "eng"},
         }
 
@@ -127,9 +125,7 @@ class API:
     def members_moved_out(self, months):
         _LOGGER.info("Getting members moved out")
         request = {
-            "url": "https://{}/services/report/members-moved-out/unit/{}/{}".format(
-                LCR_DOMAIN, self.unit_number, months
-            ),
+            "url": f"https://{LCR_DOMAIN}/api/report/members-moved-out/unit/{self.unit_number}/{months}",
             "params": {"lang": "eng"},
         }
 
@@ -139,7 +135,7 @@ class API:
     def member_list(self):
         _LOGGER.info("Getting member list")
         request = {
-            "url": "https://{}/services/umlu/report/member-list".format(LCR_DOMAIN),
+            "url": f"https://{LCR_DOMAIN}/api/umlu/report/member-list",
             "params": {"lang": "eng", "unitNumber": self.unit_number},
         }
 
@@ -186,11 +182,10 @@ class API:
         """
         _LOGGER.info("Getting ministering data")
         request = {
-            "url": "https://{}/services/umlu/v1/ministering/data-full".format(
-                LCR_DOMAIN
-            ),
+            "url": f"https://{LCR_DOMAIN}/api/umlu/v1/ministering/data-full",
             "params": {"lang": "eng", "unitNumber": self.unit_number},
         }
+        # https://lcr.churchofjesuschrist.org/api/umlu/v1/ministering/data-full?lang=eng&type=EQ&unitNumber=2117177
 
         result = self._make_request(request)
         return result.json()
@@ -214,7 +209,7 @@ class API:
         """
         _LOGGER.info("Getting recommend status")
         request = {
-            "url": "https://{}/services/recommend/recommend-status".format(LCR_DOMAIN),
+            "url": f"https://{LCR_DOMAIN}/api/recommend/recommend-status",
             "params": {"lang": "eng", "unitNumber": self.unit_number},
         }
         result = self._make_request(request)
