@@ -11,7 +11,7 @@ def load_profile():
 
 
 def download_units_data(profile):
-    units = unit.load_units("units.json")
+    units = unit.load_units(profile["units"])
     api = API(profile["username"], profile["password"], profile["unit_number"])
     reporter = quarterly_report.HistoricalQuarterlyReport(api, units)
     reporter.download_historical_quarters_to_csv(

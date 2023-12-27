@@ -38,10 +38,8 @@ class Unit:
         return f"Unit(Name: {self._name}, Number: {self._number})"
 
 
-def load_units(units_json_file: str):
-    with open(units_json_file) as f:
-        json_units = json.load(f)
+def load_units(unit_dict: Dict):
     units = []
-    for json_unit in json_units:
+    for json_unit in unit_dict:
         units.append(Unit(json_unit["name"], json_unit["number"]))
     return units
