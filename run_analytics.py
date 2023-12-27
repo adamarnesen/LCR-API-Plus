@@ -24,7 +24,9 @@ def main():
     profile = load_profile()
     download_units_data(profile)
     start_year = 2022
-    create_quarterly_analytics(f"analytics\data\{profile['unit_name']}.csv", start_year)
+    create_quarterly_analytics(
+        f"analytics\data\{profile['unit_name']}.csv", start_year, profile["unit_name"]
+    )
 
 
 if __name__ == "__main__":

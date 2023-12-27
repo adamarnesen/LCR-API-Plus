@@ -18,6 +18,11 @@ STANDARDS_2024 = {
     "ward.active.adults": 100,
     "ward.active.youth": 20,
 }
+"""Unit Standards starting in 2024.
+
+In late 2023, the church released standards for unit sizes that would take effect in 2024. 
+The summary of these changes can be seen in on the [church newsroom](https://newsroom.churchofjesuschrist.org/article/first-presidency-announces-uniform-worldwide-standards-for-ward-and-stake-boundaries).
+This variable reflects what those new minimums are and is used when drawing min lines for reports."""
 
 
 def get_section_by_label(qrp, section_id):
@@ -175,7 +180,7 @@ def make_individual_charts(df: pd.DataFrame):
     chart_youth_active_per_ward(df)
 
 
-def create_quarterly_analytics(data_file: str, starting_year: int):
+def create_quarterly_analytics(data_file: str, starting_year: int, unit_name: str):
     df = pd.read_csv(data_file)
     df = df[df["year"] >= starting_year]
     make_individual_charts(df)
@@ -209,4 +214,4 @@ def create_quarterly_analytics(data_file: str, starting_year: int):
             "variables": ["children.attending.primary.2019.1"],
         },
     ]
-    make_charts_colum_per_ward(df, rows, "RRTES Wards")
+    make_charts_colum_per_ward(df, rows, unit_name)
