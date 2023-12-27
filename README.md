@@ -1,8 +1,10 @@
 # LCR API
 
-Forked from: https://github.com/philipbl/LCR-API. Updated in PIP as lcr-api-plus to pull the new version that works.
+Forked from: https://github.com/philipbl/LCR-API.
 
-A Python API for Leader and Clerk Resources for [The Church of Jesus Christ of Latter-day Saints](https://www.churchofjesuschrist.org/?lang=eng). I've only tested it with Python 3.5+.
+A Python API and some analytics for Leader and Clerk Resources for
+[The Church of Jesus Christ of Latter-day Saints](https://www.churchofjesuschrist.org/?lang=eng).
+I've only tested it with Python 3.5+.
 
 The following calls are supported, which correspond to a page in LCR:
 
@@ -23,7 +25,57 @@ More calls will be supported as I have time. Pull requests are welcomed!
 
 This code is rough around the edges. I don't handle any cases where a person using this code doesn't have permissions to access the reports, so I don't know what will happen.
 
+## Setup
+
+1. Install [Python 3.10](https://www.python.org/downloads/release/python-3100/)
+1. Install and setup `pipenv`: `pip install pipenv`
+1. Setup environment for this project
+   1. From the root directory of the project (where the `Pipfile` file is
+      located) run `pipenv install`
+   1. Activate the environment using `pipenv shell`
+
 ## Usage
+
+### Quarterly Reports Example
+
+You can create a set of charts for multiple units (ex. in a stake) based on their quarterly
+reports. You will need to have access to each unit in order to pull data.
+
+To run analytics on the quarterly report, use `run_analytics.py`. To run this, you should place a
+file called `profile.json` in the root directory of this project. The contents of that file should
+contain the following.
+
+```json
+{
+  "username": "<your lcr username>",
+  "password": "<your lcr password>",
+  "unit_number": 12345, // The unit you belong to. Can be a stake or ward.
+  "unit_name": "<A name you want to use for your unit.>", // note this does not have to match the actual unit name.
+  "units": [
+    // specify as many units as you want that your LCR account has access to.
+    {
+      "name": "<unitName1>", // the name to show in analytics for this unit. Does not need to match the actual unit name.
+      "number": 121314 // The unit number
+    },
+    {
+      "name": "<unitName2>",
+      "number": 151617
+    },
+    {
+      "name": "<unitNameN>",
+      "number": 181920
+    }
+  ]
+}
+```
+
+Once you have this, run the following from the root directory of the project.
+`python run_analytics.py`
+
+This will pull the data from the specified units and produce a set of charts and graphs based on
+quarterly reports. Charts will automatically open in your default browser.
+
+### API Example
 
 ```python
 from lcr import API as LCR
