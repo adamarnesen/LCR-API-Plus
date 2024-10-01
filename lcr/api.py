@@ -58,18 +58,14 @@ class API:
 
         # Enter the username
         login_input = WebDriverWait(self.driver, TIMEOUT).until(
-            ec.presence_of_element_located(
-                (By.CSS_SELECTOR, "input#okta-signin-username")
-            )
+            ec.presence_of_element_located((By.CSS_SELECTOR, "#input28"))
         )
         login_input.send_keys(user)
         login_input.submit()
 
         # Enter password
         password_input = WebDriverWait(self.driver, TIMEOUT).until(
-            ec.presence_of_element_located(
-                (By.CSS_SELECTOR, "input.password-with-toggle")
-            )
+            ec.presence_of_element_located((By.CSS_SELECTOR, ".password-with-toggle"))
         )
         password_input.send_keys(password)
         password_input.submit()
