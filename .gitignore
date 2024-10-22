@@ -101,3 +101,4 @@ ENV/
 /analytics/data
 profile.json
 *report.ipynb
+*report.html
