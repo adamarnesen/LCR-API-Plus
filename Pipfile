@@ -12,6 +12,8 @@ pandas = "*"
 plotly = "*"
 webdriver-manager = "*"
 statsmodels = "*"
+ipykernel = "*"
+nbformat = "*"
 
 [dev-packages]
 
