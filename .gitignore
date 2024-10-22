@@ -100,4 +100,3 @@ ENV/
 # project secrets
 /analytics/data
 profile.json
-ward_report.ipynb
