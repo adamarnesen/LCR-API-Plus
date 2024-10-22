@@ -187,38 +187,40 @@ def aggregate_attendance_and_percentages(df: pd.DataFrame):
     percentage of attendance in these aggregates compared to the potential.
     """
 
-    df["sacrament.attending.percent"] = (
+    df.loc[:, "sacrament.attending.percent"] = (
         df["sacrament.attendance"] / df["sacrament.attendance.potential"]
     )
 
-    df["adults.attending"] = (
+    df.loc[:, "adults.attending"] = (
         df["melch.attending"]
         + df["prospective.elders.attending"]
         + df["women.attending.meetings"]
     )
-    df["adults.attending.potential"] = (
+    df.loc[:, "adults.attending.potential"] = (
         df["melch.attending.potential"]
         + df["prospective.elders.attending.potential"]
         + df["women.attending.meetings.potential"]
     )
-    df["adults.attending.percent"] = (
+    df.loc[:, "adults.attending.percent"] = (
         df["adults.attending"] / df["adults.attending.potential"]
     )
 
-    df["youth.attending"] = df["young.men.attending"] + df["young.women.attending"]
-    df["youth.attending.potential"] = (
+    df.loc[:, "youth.attending"] = (
+        df["young.men.attending"] + df["young.women.attending"]
+    )
+    df.loc[:, "youth.attending.potential"] = (
         df["young.men.attending.potential"] + df["young.women.attending.potential"]
     )
-    df["youth.attending.percent"] = (
+    df.loc[:, "youth.attending.percent"] = (
         df["youth.attending"] / df["youth.attending.potential"]
     )
 
-    df["children.attending.percent"] = (
+    df.loc[:, "children.attending.percent"] = (
         df["children.attending.primary.2019.1"]
         / df["children.attending.primary.2019.1.potential"]
     )
 
-    df["adults.youth.submitted.names.percent"] = (
+    df.loc[:, "adults.youth.submitted.names.percent"] = (
         df["adults.youth.submitted.names"]
         / df["adults.youth.submitted.names.potential"]
     )
