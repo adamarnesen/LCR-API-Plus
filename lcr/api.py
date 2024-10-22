@@ -32,18 +32,13 @@ class InvalidCredentialsError(Exception):
 
 
 class API:
-    def __init__(
-        self,
-        username,
-        password,
-        unit_number,
-        beta=False,
-        driver=webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=CHROME_OPTIONS
-        ),
-    ):
+    def __init__(self, username, password, unit_number, beta=False, driver=None):
         self.unit_number = unit_number
         self.session = requests.Session()
+        if not driver:
+            driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()), options=CHROME_OPTIONS
+            )
         self.driver = driver
         self.beta = beta
         self.host = BETA_HOST if beta else HOST
