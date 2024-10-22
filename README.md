@@ -35,6 +35,9 @@ This code is rough around the edges. I don't handle any cases where a person usi
       located) run `pipenv install`
    1. Activate the environment using `pipenv shell`
 
+_Note:_ If you struggle getting ChromeDriver to work, you may have to install it manually.
+If you do, you can set the path to ChromeDriver in your `profile.json` as shown below.
+
 ## Usage
 
 ### Quarterly Reports Example
@@ -52,6 +55,7 @@ contain the following.
   "password": "<your lcr password>",
   "unit_number": 12345, // The unit you belong to. Can be a stake or ward.
   "unit_name": "<A name you want to use for your unit.>", // note this does not have to match the actual unit name.
+  "chrome_driver_path": "Path to your chrome driver", // you only need this if the chrome driver auto install doesn't work.
   "units": [
     // specify as many units as you want that your LCR account has access to.
     {
