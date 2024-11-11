@@ -102,3 +102,4 @@ ENV/
 profile.json
 *report.ipynb
 *report.html
+*.ps1

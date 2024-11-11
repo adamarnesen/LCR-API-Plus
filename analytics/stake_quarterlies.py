@@ -23,6 +23,7 @@ STANDARDS_2024 = {
 In late 2023, the church released standards for unit sizes that would take effect in 2024. 
 The summary of these changes can be seen in on the [church newsroom](https://newsroom.churchofjesuschrist.org/article/first-presidency-announces-uniform-worldwide-standards-for-ward-and-stake-boundaries).
 This variable reflects what those new minimums are and is used when drawing min lines for reports."""
+RENDER_ENGINE = "png"
 
 
 def __show_and_save_html_report(report_title: str, fig):
@@ -30,7 +31,7 @@ def __show_and_save_html_report(report_title: str, fig):
     html_report_name = f"{report_title}.html"
     fig.write_html(create_and_get_output_path(html_report_name))
     print(f"{report_title} - Saved.")
-    fig.show()
+    fig.show(renderer=RENDER_ENGINE)
 
 
 def get_section_by_label(qrp, section_id):

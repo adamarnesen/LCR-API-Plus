@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e772bd1dbb9d43a0ac921117ccc7c8299034b7d267696a0a49f25db10ba5a49d"
+            "sha256": "3c7e9d8d504e522cb54408c725f334fb754c68b67a2856476d68e6558be5b115"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -430,6 +430,14 @@
             "markers": "python_version >= '3.8'",
             "version": "==0.3.0"
         },
+        "kaleido": {
+            "hashes": [
+                "sha256:2a942606a13c70dfd0a02e092ec140a1083e093ae06661c5e1b1179e477a9e44",
+                "sha256:636aedcd89f359f54687b4fe331776a7224f7c31c27d03230e4e13c7cf4cb66a"
+            ],
+            "index": "pypi",
+            "version": "==0.1.0.post1"
+        },
         "markupsafe": {
             "hashes": [
                 "sha256:0bff5e0ae4ef2e1ae4fdf2dfd5b76c75e5c2fa4132d05fc1b0dabcd20c7e28c4",
@@ -603,7 +611,7 @@
                 "sha256:faa88bc527d0f097abdc2c663cddf37c05a1c2f113716601555249805cf573f1",
                 "sha256:fc44e3c68ff00fd991b59092a54350e6e4911152682b4782f68070985aa9e648"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.10'",
             "version": "==2.1.2"
         },
         "outcome": {

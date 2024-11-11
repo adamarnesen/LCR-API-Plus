@@ -15,6 +15,7 @@ statsmodels = "*"
 ipykernel = "*"
 nbformat = "*"
 nbconvert = "*"
+kaleido = "==0.1.0.post1"
 
 [dev-packages]
 notebook = "*"
