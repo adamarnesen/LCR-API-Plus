@@ -1,0 +1,10 @@
+class LdsColors:
+    BLUE_25 = "#007DA5"
+    GRAY_35 = "#676B6E"
+    GRAY_05 = "#E0E2E2"
+    GRAY_10 = "#D0D3D3"
+    GRAY_15 = "#BDC0C0"
+    GREEN_25 = "#50A83E"
+    RED_25 = "#A6004E"
+    YELLOW_25 = "#E66A1F"
+    NEUTRAL_05 = "#EFEFE7"
