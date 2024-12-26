@@ -9,14 +9,14 @@ from analytics.data import *
 
 STANDARDS_2024 = {
     "stake.membership": 2000,
-    "stake.melch.leadership": 150,
+    "stake.melchizedek priesthood.leadership": 150,
     "stake.active.adults": 500,
     "stake.active.youth": 100,
     "stake.wards": 5,
     "ward.membership": 250,
-    "ward.melch.leadership": 20,
-    "ward.active.adults": 100,
-    "ward.active.youth": 20,
+    "ward.melchizedek priesthood.leadership": 20,
+    "ward.participating.adults": 100,
+    "ward.participating.youth": 20,
 }
 """Unit Standards starting in 2024.
 
@@ -26,11 +26,34 @@ This variable reflects what those new minimums are and is used when drawing min 
 RENDER_ENGINE = "png"
 
 
+DEFAULT_LDS_PALETTE = [
+    "#007DA5",
+    "#A6004E",
+    "#E66A1F",
+    "#50A83E",
+]
+
+ATTENDANCE_PALETTE = ["#318D43", "#D45311"]
+
+
+def ward_standards_table_md():
+    header = "| Standard | Value |\n| --- | --- |\n"
+    ward_standards = {
+        key: value for key, value in STANDARDS_2024.items() if "ward." in key
+    }
+    rows = []
+    for key, value in ward_standards.items():
+        name = key.replace(".", " ")
+        name = name.replace("ward ", "").title()
+        rows.append(f"| {name} | {value} |")
+    return header + "\n".join(rows)
+
+
 def __show_and_save_html_report(report_title: str, fig):
     """Saves the html report"""
     html_report_name = f"{report_title}.html"
     fig.write_html(create_and_get_output_path(html_report_name))
-    print(f"{report_title} - Saved.")
+    # print(f"{report_title} - Saved.")
     fig.show(renderer=RENDER_ENGINE)
 
 
@@ -55,8 +78,22 @@ def get_value_for_field(qrp, section_id, row_id):
     return row_id, row["actualValue"]
 
 
+def clean_legend_entry(entry: str) -> str:
+    entry = (
+        entry.replace("ward.", "")
+        .replace(".", " ")
+        .replace("melch", "melchizedek priesthood")
+        .title()
+    )
+    return entry
+
+
 def make_bar_chart_per_ward_in_grid(
-    df: pd.DataFrame, min_line: int = None, title: str = "", plot_variable: [str] = None
+    df: pd.DataFrame,
+    min_line: int = None,
+    title: str = "",
+    plot_variable: [str] = None,
+    color_scheme: [str] = DEFAULT_LDS_PALETTE,
 ):
     wards = df["unitName"].unique()
     grid_size = math.ceil(math.sqrt(len(wards)))
@@ -78,15 +115,24 @@ def make_bar_chart_per_ward_in_grid(
                     x=subset["quarter"],
                     y=subset[variable],
                     name=variable,
-                    marker_color=px.colors.qualitative.D3[j],
+                    marker_color=color_scheme[j],
                     showlegend=show_legend,
+                    text=subset[variable],
+                    textposition="auto",
                 ),
                 row=row,
                 col=col,
             )
+            fig.update_traces(
+                name=clean_legend_entry(variable), selector=dict(name=variable)
+            )
 
         if min_line:
             fig.add_hline(y=min_line, line_dash="dash", row=row, col=col)
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5)
+    )
+
     fig.update_layout(
         title={
             "text": title,
@@ -140,9 +186,10 @@ def chart_melch_per_ward(df: pd.DataFrame):
     df["melch.not.attending"] = df["adult.male.melch"] - df["melch.attending"]
     make_bar_chart_per_ward_in_grid(
         df,
-        min_line=STANDARDS_2024["ward.melch.leadership"],
+        min_line=STANDARDS_2024["ward.melchizedek priesthood.leadership"],
         title="Melchizedek Priesthood Attendance",
         plot_variable=["melch.attending", "melch.not.attending"],
+        color_scheme=ATTENDANCE_PALETTE,
     )
 
 
@@ -166,18 +213,50 @@ def chart_membership_per_ward(df: pd.DataFrame):
 def chart_adult_active_per_ward(df: pd.DataFrame):
     make_bar_chart_per_ward_in_grid(
         df,
-        title="Active Adults",
+        title="Adults Attending Sunday Meetings",
         plot_variable=["melch.attending", "women.attending.meetings"],
-        min_line=STANDARDS_2024["ward.active.adults"],
+        min_line=STANDARDS_2024["ward.participating.adults"],
+    )
+
+
+def chart_adult_temple_recommends_per_ward(df: pd.DataFrame):
+    make_bar_chart_per_ward_in_grid(
+        df,
+        title="Adults with Temple Recommend",
+        plot_variable=["endowed.adults.with.recommend"],
+    )
+
+
+def chart_youth_temple_recommends_per_ward(df: pd.DataFrame):
+    make_bar_chart_per_ward_in_grid(
+        df,
+        title="Youth with Temple Recommend",
+        plot_variable=["youth.with.recommend"],
+    )
+
+
+def chart_all_temple_recommends_per_ward(df: pd.DataFrame):
+    make_bar_chart_per_ward_in_grid(
+        df,
+        title="All Members with Temple Recommends",
+        plot_variable=["endowed.adults.with.recommend", "youth.with.recommend"],
+    )
+
+
+def chart_sacrament_meeting_attendance_per_ward(df: pd.DataFrame):
+    make_bar_chart_per_ward_in_grid(
+        df,
+        title="Sacrament Meeting Attendance",
+        plot_variable=["sacrament.attendance"],
     )
 
 
 def chart_youth_active_per_ward(df: pd.DataFrame):
     make_bar_chart_per_ward_in_grid(
         df,
-        title="Active Youth",
+        title="Participating Youth",
         plot_variable=["young.men.attending", "young.women.attending"],
-        min_line=STANDARDS_2024["ward.active.youth"],
+        min_line=STANDARDS_2024["ward.participating.youth"],
     )
 
 
@@ -259,7 +338,7 @@ def chart_attendance_percent_trend(df: pd.DataFrame):
             y=df[plot["variable"]],
             color="unitName",
             markers=True,
-            color_discrete_sequence=px.colors.qualitative.D3,
+            color_discrete_sequence=DEFAULT_LDS_PALETTE,
         )
         fig_go = go.Figure(fig_px)
         for trace in fig_go.data:
@@ -273,6 +352,8 @@ def chart_attendance_percent_trend(df: pd.DataFrame):
             "text": title,
         },
     )
+    if len(df["unitName"].unique()) == 1:
+        fig.update_layout(showlegend=False)
     __show_and_save_html_report(title, fig)
 
 
@@ -325,17 +406,17 @@ def create_quarterly_analytics(data_file: str, starting_year: int, unit_name: st
         {
             "name": "Melchizedek Priesthood",
             "variables": ["melch.attending"],
-            "standard": STANDARDS_2024["ward.melch.leadership"],
+            "standard": STANDARDS_2024["ward.melchizedek priesthood.leadership"],
         },
         {
             "name": "Adults",
             "variables": ["melch.attending", "women.attending.meetings"],
-            "standard": STANDARDS_2024["ward.active.adults"],
+            "standard": STANDARDS_2024["ward.participating.adults"],
         },
         {
             "name": "Youth",
             "variables": ["young.men.attending", "young.women.attending"],
-            "standard": STANDARDS_2024["ward.active.youth"],
+            "standard": STANDARDS_2024["ward.participating.youth"],
         },
         {
             "name": "Sacrament",
